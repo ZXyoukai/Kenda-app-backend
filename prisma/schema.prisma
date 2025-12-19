@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PASSENGER
+  DRIVER
+  ADMIN
+}
+
+enum RideType {
+  PERSON
+  CARGO
+}
+
+enum RideStatus {
+  PENDING
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+  avatarUrl String?
+  role      Role     @default(PASSENGER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Wallet
+  balance Float @default(0.0)
+
+  // Driver specific
+  isOnline      Boolean @default(false)
+  currentLat    Float?
+  currentLng    Float?
+  vehicleModel  String?
+  vehiclePlate  String?
+
+  // Relations
+  ridesAsPassenger Ride[]        @relation("PassengerRides")
+  ridesAsDriver    Ride[]        @relation("DriverRides")
+  transactions     Transaction[]
+  ratingsGiven     Rating[]      @relation("RatingsGiven")
+  ratingsReceived  Rating[]      @relation("RatingsReceived")
+}
+
+model Ride {
+  id          String     @id @default(uuid())
+  passengerId String
+  driverId    String?
+  status      RideStatus @default(PENDING)
+  type        RideType   @default(PERSON)
+
+  originLat     Float
+  originLng     Float
+  originAddress String
+
+  destLat     Float
+  destLng     Float
+  destAddress String
+
+  distanceKm    Float?
+  durationMin   Float?
+  estimatedPrice Float
+  finalPrice     Float?
+
+  // Cargo specific
+  cargoDescription String?
+  cargoWeight      Float? // in kg
+  cargoDimensions  String? // e.g., "10x10x10"
+
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  passenger User      @relation("PassengerRides", fields: [passengerId], references: [id])
+  driver    User?     @relation("DriverRides", fields: [driverId], references: [id])
+  rating    Rating?
+  transaction Transaction?
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  userId    String
+  rideId    String?  @unique
+  amount    Float
+  type      String   // CREDIT, DEBIT
+  description String?
+  createdAt DateTime @default(now())
+
+  user User  @relation(fields: [userId], references: [id])
+  ride Ride? @relation(fields: [rideId], references: [id])
+}
+
+model Rating {
+  id          String   @id @default(uuid())
+  rideId      String   @unique
+  raterId     String
+  ratedUserId String
+  stars       Int      // 1-5
+  comment     String?
+  createdAt   DateTime @default(now())
+
+  ride      Ride @relation(fields: [rideId], references: [id])
+  rater     User @relation("RatingsGiven", fields: [raterId], references: [id])
+  ratedUser User @relation("RatingsReceived", fields: [ratedUserId], references: [id])
+}
