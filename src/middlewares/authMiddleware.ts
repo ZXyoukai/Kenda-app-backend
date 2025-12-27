@@ -39,3 +39,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     return;
   }
 };
+
+// Alias for consistency
+export const authenticate = authMiddleware;
+

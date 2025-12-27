@@ -26,6 +26,16 @@ enum RideStatus {
   CANCELLED
 }
 
+enum PaymentMethod {
+  CASH
+  MULTICAIXA_EXPRESS
+}
+
+enum TransactionType {
+  RIDE_PAYMENT
+  REFUND
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -36,9 +46,6 @@ model User {
   role      Role     @default(PASSENGER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Wallet
-  balance Float @default(0.0)
 
   // Driver specific
   isOnline      Boolean @default(false)
@@ -93,13 +100,14 @@ model Ride {
 }
 
 model Transaction {
-  id        String   @id @default(uuid())
-  userId    String
-  rideId    String?  @unique
-  amount    Float
-  type      String   // CREDIT, DEBIT
-  description String?
-  createdAt DateTime @default(now())
+  id            String          @id @default(uuid())
+  userId        String
+  rideId        String?         @unique
+  amount        Float
+  type          TransactionType @default(RIDE_PAYMENT)
+  paymentMethod PaymentMethod
+  description   String?
+  createdAt     DateTime        @default(now())
 
   user User  @relation(fields: [userId], references: [id])
   ride Ride? @relation(fields: [rideId], references: [id])
