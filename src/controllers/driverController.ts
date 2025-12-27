@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../middlewares/authMiddleware';
 import { DriverService } from '../services/driverService';
 
 const driverService = new DriverService();
 
-export const getProfile = async (req: Request, res: Response) => {
+export const getProfile = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const profile = await driverService.getProfile(userId!);
@@ -20,7 +21,7 @@ export const getProfile = async (req: Request, res: Response) => {
   }
 };
 
-export const updateProfile = async (req: Request, res: Response) => {
+export const updateProfile = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const profile = await driverService.updateProfile(userId!, req.body);
@@ -68,7 +69,7 @@ export const getDriverById = async (req: Request, res: Response) => {
   }
 };
 
-export const updateLocation = async (req: Request, res: Response) => {
+export const updateLocation = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const { lat, lng } = req.body;
@@ -80,7 +81,7 @@ export const updateLocation = async (req: Request, res: Response) => {
   }
 };
 
-export const setOnlineStatus = async (req: Request, res: Response) => {
+export const setOnlineStatus = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const { isOnline } = req.body;

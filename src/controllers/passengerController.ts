@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../middlewares/authMiddleware';
 import { PassengerService } from '../services/passengerService';
 
 const passengerService = new PassengerService();
 
-export const getProfile = async (req: Request, res: Response) => {
+export const getProfile = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const profile = await passengerService.getProfile(userId!);
@@ -20,7 +21,7 @@ export const getProfile = async (req: Request, res: Response) => {
   }
 };
 
-export const updateProfile = async (req: Request, res: Response) => {
+export const updateProfile = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const profile = await passengerService.updateProfile(userId!, req.body);
