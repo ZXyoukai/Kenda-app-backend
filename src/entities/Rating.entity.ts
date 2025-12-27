@@ -12,7 +12,13 @@ export class RatingEntity {
   createdAt: Date;
 
   constructor(data: Partial<RatingEntity>) {
-    Object.assign(this, data);
+    this.id = data.id || '';
+    this.rideId = data.rideId || '';
+    this.raterId = data.raterId || '';
+    this.ratedUserId = data.ratedUserId || '';
+    this.stars = data.stars || 0;
+    this.comment = data.comment || null;
+    this.createdAt = data.createdAt || new Date();
   }
 
   /**

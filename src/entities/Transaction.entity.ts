@@ -13,7 +13,14 @@ export class TransactionEntity {
   createdAt: Date;
 
   constructor(data: Partial<TransactionEntity>) {
-    Object.assign(this, data);
+    this.id = data.id || '';
+    this.userId = data.userId || '';
+    this.rideId = data.rideId || null;
+    this.amount = data.amount || 0;
+    this.type = data.type || 'RIDE_PAYMENT';
+    this.paymentMethod = data.paymentMethod || 'CASH';
+    this.description = data.description || null;
+    this.createdAt = data.createdAt || new Date();
   }
 
   /**

@@ -34,7 +34,34 @@ export class RideEntity {
   updatedAt: Date;
 
   constructor(data: Partial<RideEntity>) {
-    Object.assign(this, data);
+    this.id = data.id || '';
+    this.passengerId = data.passengerId || '';
+    this.driverId = data.driverId || null;
+    this.status = data.status || 'PENDING';
+    this.type = data.type || 'PERSON';
+    
+    this.originLat = data.originLat || 0;
+    this.originLng = data.originLng || 0;
+    this.originAddress = data.originAddress || '';
+    
+    this.destLat = data.destLat || 0;
+    this.destLng = data.destLng || 0;
+    this.destAddress = data.destAddress || '';
+    
+    this.distanceKm = data.distanceKm || null;
+    this.durationMin = data.durationMin || null;
+    this.estimatedPrice = data.estimatedPrice || 0;
+    this.finalPrice = data.finalPrice || null;
+    
+    this.cargoDescription = data.cargoDescription || null;
+    this.cargoWeight = data.cargoWeight || null;
+    this.cargoDimensions = data.cargoDimensions || null;
+    
+    this.scheduledAt = data.scheduledAt || null;
+    this.startedAt = data.startedAt || null;
+    this.completedAt = data.completedAt || null;
+    this.createdAt = data.createdAt || new Date();
+    this.updatedAt = data.updatedAt || new Date();
   }
 
   /**

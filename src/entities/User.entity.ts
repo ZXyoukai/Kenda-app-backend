@@ -21,7 +21,21 @@ export class UserEntity {
   vehiclePlate: string | null;
 
   constructor(data: Partial<UserEntity>) {
-    Object.assign(this, data);
+    this.id = data.id || '';
+    this.email = data.email || '';
+    this.password = data.password || '';
+    this.name = data.name || '';
+    this.phone = data.phone || null;
+    this.avatarUrl = data.avatarUrl || null;
+    this.role = data.role || 'PASSENGER';
+    this.createdAt = data.createdAt || new Date();
+    this.updatedAt = data.updatedAt || new Date();
+    
+    this.isOnline = data.isOnline || false;
+    this.currentLat = data.currentLat || null;
+    this.currentLng = data.currentLng || null;
+    this.vehicleModel = data.vehicleModel || null;
+    this.vehiclePlate = data.vehiclePlate || null;
   }
 
   /**
