@@ -95,7 +95,7 @@ model Ride {
 
   passenger User      @relation("PassengerRides", fields: [passengerId], references: [id])
   driver    User?     @relation("DriverRides", fields: [driverId], references: [id])
-  rating    Rating?
+  ratings   Rating[]
   transaction Transaction?
 }
 
@@ -115,7 +115,7 @@ model Transaction {
 
 model Rating {
   id          String   @id @default(uuid())
-  rideId      String   @unique
+  rideId      String
   raterId     String
   ratedUserId String
   stars       Int      // 1-5
@@ -125,4 +125,6 @@ model Rating {
   ride      Ride @relation(fields: [rideId], references: [id])
   rater     User @relation("RatingsGiven", fields: [raterId], references: [id])
   ratedUser User @relation("RatingsReceived", fields: [ratedUserId], references: [id])
+
+  @@unique([rideId, raterId], name: "unique_ride_rater")
 }

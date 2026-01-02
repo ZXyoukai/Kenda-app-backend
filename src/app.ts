@@ -8,6 +8,7 @@ import driverRoutes from './routes/driverRoutes';
 import rideRoutes from './routes/rideRoutesV2';
 import transactionRoutes from './routes/transactionRoutes';
 import ratingRoutes from './routes/ratingRoutes';
+import statsRoutes from './routes/statsRoutes';
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/drivers', driverRoutes);
 app.use('/rides', rideRoutes);
 app.use('/transactions', transactionRoutes);
 app.use('/ratings', ratingRoutes);
+app.use('/stats', statsRoutes);
 
 app.get('/', (req, res) => {
   res.json({
