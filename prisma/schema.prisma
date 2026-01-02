@@ -36,6 +36,13 @@ enum TransactionType {
   REFUND
 }
 
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -53,6 +60,10 @@ model User {
   currentLng    Float?
   vehicleModel  String?
   vehiclePlate  String?
+  vehicleColor  String?
+  vehicleYear   Int?
+  averageRating Float?  @default(0)
+  totalRides    Int?    @default(0)
 
   // Relations
   ridesAsPassenger Ride[]        @relation("PassengerRides")
@@ -60,6 +71,7 @@ model User {
   transactions     Transaction[]
   ratingsGiven     Rating[]      @relation("RatingsGiven")
   ratingsReceived  Rating[]      @relation("RatingsReceived")
+  proposals        Proposal[]
 }
 
 model Ride {
@@ -97,6 +109,26 @@ model Ride {
   driver    User?     @relation("DriverRides", fields: [driverId], references: [id])
   ratings   Rating[]
   transaction Transaction?
+  proposals Proposal[]
+}
+
+model Proposal {
+  id                String         @id @default(uuid())
+  rideId            String
+  driverId          String
+  proposedPrice     Float
+  estimatedDuration Int? // in minutes
+  message           String?
+  status            ProposalStatus @default(PENDING)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  ride   Ride @relation(fields: [rideId], references: [id], onDelete: Cascade)
+  driver User @relation(fields: [driverId], references: [id])
+
+  @@index([rideId])
+  @@index([driverId])
+  @@index([status])
 }
 
 model Transaction {

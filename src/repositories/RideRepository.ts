@@ -28,7 +28,7 @@ export class RideRepository {
             vehiclePlate: true,
           },
         },
-        rating: true,
+        ratings: true,
         transaction: true,
       },
     });

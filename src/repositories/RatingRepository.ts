@@ -30,7 +30,7 @@ export class RatingRepository {
   }
 
   async findByRideId(rideId: string): Promise<Rating | null> {
-    return await prisma.rating.findUnique({
+    return await prisma.rating.findFirst({
       where: { rideId },
       include: {
         rater: {

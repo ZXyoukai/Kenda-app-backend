@@ -16,8 +16,13 @@ export interface UpdateUserDTO {
 }
 
 export interface UpdateDriverDTO {
+  name?: string;
+  phone?: string;
+  avatarUrl?: string;
   vehicleModel?: string;
   vehiclePlate?: string;
+  vehicleColor?: string;
+  vehicleYear?: number;
   isOnline?: boolean;
   currentLat?: number;
   currentLng?: number;
@@ -39,6 +44,8 @@ export interface DriverResponseDTO extends UserResponseDTO {
   currentLng: number | null;
   vehicleModel: string | null;
   vehiclePlate: string | null;
+  vehicleColor: string | null;
+  vehicleYear: number | null;
   averageRating?: number;
   totalRides?: number;
 }

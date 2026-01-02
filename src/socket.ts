@@ -27,6 +27,18 @@ export const initSocket = (httpServer: HttpServer) => {
       io.emit(`driverLocation:${data.driverId}`, data);
     });
 
+    // Join ride room to receive updates
+    socket.on('joinRide', (rideId: string) => {
+      socket.join(`ride:${rideId}`);
+      console.log(`Socket ${socket.id} joined ride room ${rideId}`);
+    });
+
+    // Leave ride room
+    socket.on('leaveRide', (rideId: string) => {
+      socket.leave(`ride:${rideId}`);
+      console.log(`Socket ${socket.id} left ride room ${rideId}`);
+    });
+
     socket.on('disconnect', () => {
       console.log('Client disconnected:', socket.id);
     });
